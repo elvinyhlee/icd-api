@@ -6,6 +6,8 @@ const FlexSearch = require('flexsearch');
 // const { buildSchema } = require('graphql');
 const app = express();
 
+const PORT = process.env.PORT || 3000;
+
 app.use(bodyParser.json());
 
 const index = new FlexSearch();
@@ -58,4 +60,4 @@ app.get('/suggestion/:query', (req, res) => {
 //   graphiql: true,
 // }));
 
-app.listen(3000);
+app.listen(PORT);
