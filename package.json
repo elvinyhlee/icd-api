@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "test": "jest",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +17,8 @@
     "graphql": "^14.1.1"
   },
   "devDependencies": {
-    "nodemon": "^1.18.9"
+    "jest": "^24.1.0",
+    "nodemon": "^1.18.9",
+    "supertest": "^3.4.2"
   }
 }

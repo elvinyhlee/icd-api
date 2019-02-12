@@ -6,8 +6,6 @@ const FlexSearch = require('flexsearch');
 // const { buildSchema } = require('graphql');
 const app = express();
 
-const PORT = process.env.PORT || 8080;
-
 app.use(bodyParser.json());
 
 const index = new FlexSearch();
@@ -64,4 +62,4 @@ for (let key in used) {
   console.log(`${key} ${Math.round(used[key] / 1024 / 1024 * 100) / 100} MB`);
 }
 
-app.listen(PORT);
+module.exports = app;
