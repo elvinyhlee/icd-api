@@ -1,5 +1,5 @@
 const express = require('express');
-// const FlexSearch = require('flexsearch');
+const FlexSearch = require('flexsearch');
 // const graphqlHttp = require('express-graphql');
 // const { buildSchema } = require('graphql');
 
@@ -7,25 +7,31 @@ const icd10Model = require('./icd10Model');
 
 const router = express.Router();
 
-// const index = new FlexSearch("memory");
+const index = new FlexSearch();
 
-// index.add(x['icd_code'], x["short_description"])
+icd10Model
+  .find({})
+  .cursor()
+  .on('data', (doc) => { index.add(doc['icd_code'], doc['short_description']) });
+
 router.get('/:id', (req, res) => {
-  icd10Model.findById(req.params.id, (err, icdInstance) => {
-    if (err) return res.status(500).send('There was a problem finding the icd code');
-    if (!icdInstance) return res.status(404).send('No icd code found.');
-    return res.status(200).json(icdInstance);
-  })
+  icd10Model
+    .find({ icd_code: req.params.id }, (err, icdInstance) => {
+      if (err) return res.status(500).send('There was a problem finding the icd code');
+      if (!icdInstance) return res.status(404).send('No icd code found.');
+      return res.status(200).json(icdInstance);
+    })
 });
 
-// app.get('/suggestion/:query', (req, res) => {
-//   const query = req.params.query;
-//   const result_list = index.search(query, 50);
-//   const results = result_list.map(x =>
-//     icd[x]['short_description']
-//   );
-//   res.status(200).send(results);
-// });
+router.get('/suggestion/:query', (req, res) => {
+  const result_list = index.search(req.params.query, 10);
+  icd10Model
+    .find({icd_code: {$in:result_list}}, (err, icdInstance) => {
+      if (err) return res.status(500).send('There was a problem finding the icd code');
+      if (!icdInstance) return res.status(404).send('No icd code found.');
+      return res.status(200).json(icdInstance);
+    });
+});
 
 // app.use('/graphql', graphqlHttp({
 //   schema: buildSchema(`
