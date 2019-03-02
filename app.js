@@ -6,7 +6,7 @@ const app = express();
 
 const icd10Controller = require('./icd10/icd10Controller');
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@icd-cluster-ghdlz.gcp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`);
+mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@icd-cluster-shard-00-00-ghdlz.gcp.mongodb.net:27017,icd-cluster-shard-00-01-ghdlz.gcp.mongodb.net:27017,icd-cluster-shard-00-02-ghdlz.gcp.mongodb.net:27017/${process.env.MONGO_DB}?ssl=true&replicaSet=icd-cluster-shard-0&authSource=admin&retryWrites=true`);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

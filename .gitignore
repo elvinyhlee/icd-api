@@ -2,3 +2,4 @@ node_modules
 .idea
 nodemon.json
 app.yaml
+.gcloudignore
