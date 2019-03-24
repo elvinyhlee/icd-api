@@ -3,12 +3,19 @@ const FlexSearch = require('flexsearch');
 
 const icd10Model = require('./icd10Model');
 const router = express.Router();
-const index = new FlexSearch('balance');
+const index = new FlexSearch();
 
 icd10Model
   .find({})
   .cursor()
-  .on('data', (doc) => { index.add(doc['code'], doc['long_description']) })
+  .on('data', (doc) => {
+    if (doc['inclusion_term']) {
+      // TODO(Elvin): tokenize the description properly
+      index.add(doc['code'], doc['long_description'] + ", " + doc['inclusion_term'].join());
+    } else {
+      index.add(doc['code'], doc['long_description']);
+    }
+  });
 
 router.get('/:id', (req, res) => {
   icd10Model
